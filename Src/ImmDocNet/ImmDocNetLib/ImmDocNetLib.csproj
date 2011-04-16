@@ -1,0 +1,197 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8DAB6DDA-2038-400D-B3DA-86CE41627A0F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Imm.ImmDocNetLib</RootNamespace>
+    <AssemblyName>ImmDocNetLib</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Cecil, Version=0.6.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\MonoCecil\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Documenters\DocGenerationOptions.cs" />
+    <Compile Include="AssembliesInfo.cs" />
+    <Compile Include="Documenters\Documenter.cs" />
+    <Compile Include="Documenters\HTMLDocumenter\HTMLDocumenter.cs" />
+    <Compile Include="Documenters\HTMLDocumenter\Icons.cs" />
+    <Compile Include="Documenters\ISummarisableMember.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="MyReflection\Attributes\MyEventAttributes.cs" />
+    <Compile Include="MyReflection\GenericConstraints\BuiltIntGenericConstraint.cs" />
+    <Compile Include="MyReflection\GenericConstraints\NakedTypeConstraint.cs" />
+    <Compile Include="MyReflection\GenericConstraints\TypeGenericConstraint.cs" />
+    <Compile Include="MyReflection\MetaClasses\ClassMembersGroups.cs" />
+    <Compile Include="MyReflection\GenericConstraints\GenericConstraint.cs" />
+    <Compile Include="MyReflection\MetaClasses\ExceptionDescr.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyGenericParameterInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyInvokableMembersOverloadsInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyPropertiesOverloadsInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\NamespaceMembersGroups.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyDelegateInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MetaClass.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyAssemblyInfo.cs" />
+    <Compile Include="MyReflection\Attributes\MyClassAttributes.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyClassInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyConstructorInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyEnumerationInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyEventInfo.cs" />
+    <Compile Include="MyReflection\Attributes\MyFieldAttributes.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyFieldInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyInterfaceInfo.cs" />
+    <Compile Include="MyReflection\Attributes\MyInvokableMemberAttributes.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyInvokableMemberInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyMethodInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyNamespaceInfo.cs" />
+    <Compile Include="MyReflection\Attributes\MyParameterAttributes.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyNestedTypeInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyParameterInfo.cs" />
+    <Compile Include="MyReflection\Attributes\MyPropertyAttributes.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyPropertyInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\MyStructureInfo.cs" />
+    <Compile Include="MyReflection\MetaClasses\NestedTypes.cs" />
+    <Compile Include="MyReflection\Tools.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\Contents.css" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\TableOfContents.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\Common.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\Assembly.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\EnumField.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\Namespace.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedClass.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedDelegate.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedEnumeration.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedEvent.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedField.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInterface.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedMethod.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedProperty.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedStructure.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PublicClass.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PublicDelegate.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PublicEnumeration.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PublicEvent.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PublicField.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PublicInterface.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PublicMethod.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PublicProperty.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PublicStructure.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\Static.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\Virtual.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\None.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\BigSquareCollapsed.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\BigSquareExpanded.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\SmallSquareCollapsed.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\SmallSquareExpanded.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\TV_Minus.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\TV_Null.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\TV_Plus.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\TV_VerticalDots.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\TableOfContentsTemplate.html" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\IndexTemplate.html" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\TreeView.css" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\TreeView.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\ImmJSLib.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\LeftArrow.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\RightArrow.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\Abstract.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\Lists.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\InternalClass.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\InternalDelegate.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\InternalEnumeration.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\InternalEvent.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\InternalField.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\InternalInterface.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\InternalMethod.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\InternalProperty.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\InternalStructure.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PrivateClass.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PrivateDelegate.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PrivateEnumeration.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PrivateEvent.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PrivateField.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PrivateInterface.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PrivateMethod.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PrivateProperty.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\PrivateStructure.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInternalClass.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInternalDelegate.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInternalEnumeration.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInternalEvent.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInternalField.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInternalInterface.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInternalMethod.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInternalProperty.gif" />
+    <EmbeddedResource Include="Documenters\HTMLDocumenter\Res\GFX\ProtectedInternalStructure.gif" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

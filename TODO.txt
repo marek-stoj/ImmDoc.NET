@@ -1,0 +1,28 @@
+﻿Assembly analysis features:
+
+ - #cctor members (static constructors),
+ - resolving of types links,
+ - <seealso> tags,
+ - HasSecurity and Serializable attributes,
+ - custom attributes,
+ - explicit interface implementation,
+ - inheritance hierarchy,
+ - detect usage of 'new' modifier,
+
+Usability features:
+
+ - sort TOC,
+ - allow contents of the main header to be wrapped,
+ - fix header in left menu frame (it should always be on top even after vertical scrolling),
+ - remove dotted lines in tree view for last children,
+ - create front-end,
+
+Bugs:
+
+ - BUG: some complicated methods with ref parameters can't be found,
+ - BUG: in Firefox with toggling the left menu after manually resizing the frame,
+
+Source code refactorings: 
+ 
+ - revise handling of errors and warnings,
+ - refactor methods GetXXXAttributes(),
