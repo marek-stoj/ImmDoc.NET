@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImmDocNetLib", "ImmDocNetLib\ImmDocNetLib.csproj", "{8DAB6DDA-2038-400D-B3DA-86CE41627A0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImmDocNet", "ImmDocNet\ImmDocNet.csproj", "{34DC5686-C7C8-45E6-B72E-BECD69F7533B}"

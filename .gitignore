@@ -11,3 +11,9 @@
 /Src/ImmDocNet/SampleLibrary2/obj
 /Src/ImmDocNet/SampleLibrary2/bin
 /Src/ImmDocNet/ImmDocNet.suo
+/Src/ImmDocNet/_ReSharper.ImmDocNet
+/Src/ImmDocNet/ImmDocNet.5.0.ReSharper.user
+/Src/ImmDocNet/ImmDocNetLib.Tests/ImmDocNetLib.Tests.csproj.user
+/Src/ImmDocNet/ImmDocNetLib/ImmDocNetLib.csproj.user
+/Src/ImmDocNet/SampleLibrary/SampleLibrary.csproj.user
+/Src/ImmDocNet/SampleLibrary2/SampleLibrary2.csproj.user
