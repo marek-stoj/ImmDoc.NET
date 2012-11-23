@@ -173,7 +173,11 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 
               string declaringTypeFullName = xmlMemberId.Substring(0, indexOfLastDot);
               MyClassInfo declaringType = FindNamespaceMember(declaringTypeFullName);
-              Debug.Assert(declaringType != null, "Declaring type of a nested type must be present.");
+              if (declaringType == null)
+              {
+                  // Declaring type of a nested type is private
+                  break;
+              }
 
               MyNestedTypeInfo myNestedTypeInfo = declaringType.GetNestedTypeMember(myClassInfo);
               Debug.Assert(myNestedTypeInfo != null, "Impossible! This nested type must be there.");
