@@ -22,15 +22,16 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
-using Mono.Cecil;
+using System.Linq;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Xsl;
 
 using Imm.ImmDocNetLib.MyReflection.MetaClasses;
 using Imm.ImmDocNetLib.MyReflection.GenericConstraints;
-using System.Reflection;
+using Mono.Cecil;
 
 namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
 {
@@ -361,7 +362,7 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
           MyAssemblyInfo myAssemblyInfo = (MyAssemblyInfo)metaClass;
           int number = 1;
 
-          foreach (MyNamespaceInfo myNamespaceInfo in myAssemblyInfo.Namespaces)
+          foreach (MyNamespaceInfo myNamespaceInfo in myAssemblyInfo.Namespaces.OrderBy(s => s.DisplayableName))
           {
             CreateTOCTreeViewAux(myNamespaceInfo, treePath + "_" + number, sb);
             number++;

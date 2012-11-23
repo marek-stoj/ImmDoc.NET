@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Linq;
 using Imm.ImmDocNetLib.MyReflection.MetaClasses;
 using Mono.Cecil;
 using System.Diagnostics;
@@ -457,6 +458,11 @@ namespace Imm.ImmDocNetLib
 
     public static bool ShouldIncludeType(TypeDefinition typeDefinition)
     {
+      if (IsCompilerGenerated(typeDefinition))
+      {
+        return false;
+      }
+
       bool result = typeDefinition.IsPublic || typeDefinition.IsNestedFamily || typeDefinition.IsNestedPublic || typeDefinition.IsNestedFamilyOrAssembly;
 
       if (_includeInternalMembers)
@@ -476,7 +482,31 @@ namespace Imm.ImmDocNetLib
         result = result || typeDefinition.IsNestedPrivate;
       }
 
+      if (IsTypeNested(typeDefinition))
+      {
+        // nested type should only be included if parent type is visible
+        var typeRef = typeDefinition.DeclaringType;
+        foreach (TypeDefinition type in typeDefinition.Module.Types)
+        {
+           if (type.FullName == typeRef.FullName)
+           {
+             return result && ShouldIncludeType(type);
+           }
+        }
+      }
+
       return result;
+    }
+
+    private static bool IsCompilerGenerated(TypeDefinition type)
+    {
+      if (type.CustomAttributes.Count == 0)
+      {
+        return false;
+      }
+
+      var typeName = typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute).FullName;
+      return type.CustomAttributes.OfType<CustomAttribute>().Any(ca => ca.Constructor.DeclaringType.FullName == typeName);
     }
 
     public static bool ShouldIncludeMember(MemberReference memberReference)
