@@ -276,8 +276,9 @@ namespace Imm.ImmDocNetLib
         {
           var methodDefinition = (MethodDefinition)member;
 
-          if (methodDefinition.IsSpecialName
-           && !MyMethodInfo.IsMethodNameMapped(methodDefinition.Name))
+          if (methodDefinition.IsSpecialName &&
+             !methodDefinition.IsConstructor &&
+             !MyMethodInfo.IsMethodNameMapped(methodDefinition.Name))
           {
             continue;
           }
