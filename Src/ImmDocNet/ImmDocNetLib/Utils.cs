@@ -24,11 +24,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
-using Imm.ImmDocNetLib.MyReflection.MetaClasses;
-using Mono.Cecil;
 using System.Diagnostics;
 using System.Xml.XPath;
 using System.Xml;
+using Imm.ImmDocNetLib.MyReflection.MetaClasses;
+using Mono.Cecil;
+using Mono.Collections.Generic;
 
 namespace Imm.ImmDocNetLib
 {
@@ -255,14 +256,9 @@ namespace Imm.ImmDocNetLib
       return sb.ToString();
     }
 
-    public static MemberReferenceCollection GetTypeMembers(TypeDefinition typeDefinition)
+    public static Collection<MemberReference> GetTypeMembers(TypeDefinition typeDefinition)
     {
-      var members = new MemberReferenceCollection(typeDefinition.Module);
-
-      foreach (MemberReference member in typeDefinition.Constructors)
-      {
-        members.Add(member);
-      }
+      var members = new Collection<MemberReference>();
 
       foreach (MemberReference member in typeDefinition.Events)
       {
@@ -280,8 +276,9 @@ namespace Imm.ImmDocNetLib
         {
           var methodDefinition = (MethodDefinition)member;
 
-          if (methodDefinition.IsSpecialName
-           && !MyMethodInfo.IsMethodNameMapped(methodDefinition.Name))
+          if (methodDefinition.IsSpecialName &&
+             !methodDefinition.IsConstructor &&
+             !MyMethodInfo.IsMethodNameMapped(methodDefinition.Name))
           {
             continue;
           }
@@ -618,7 +615,7 @@ namespace Imm.ImmDocNetLib
 
     #region Generics utils
 
-    public static GenericArgumentCollection GetGenericArguments(TypeReference type)
+    public static Collection<TypeReference> GetGenericArguments(TypeReference type)
     {
       if (type is GenericInstanceType)
       {

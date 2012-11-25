@@ -65,6 +65,7 @@
           <strong>
             <xsl:copy-of select="term/node()"/>
           </strong>
+          <br/>
           <xsl:copy-of select="description/node()"/>
         </xsl:when>
         <xsl:when test="term">

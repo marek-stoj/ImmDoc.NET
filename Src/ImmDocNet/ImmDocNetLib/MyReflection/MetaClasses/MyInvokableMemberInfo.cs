@@ -21,12 +21,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Mono.Cecil;
 using System.Text;
 using System.Diagnostics;
-
 using Imm.ImmDocNetLib.MyReflection.Attributes;
 using Imm.ImmDocNetLib.Documenters;
+using Mono.Cecil;
+using Mono.Collections.Generic;
 
 namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 {
@@ -66,7 +66,7 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 
         #region Protected helper methods
 
-        protected void AddParameters(ParameterDefinitionCollection tmpParameters)
+        protected void AddParameters(Collection<ParameterDefinition> tmpParameters)
         {
             foreach (ParameterDefinition parameterDefinition in tmpParameters)
             {
