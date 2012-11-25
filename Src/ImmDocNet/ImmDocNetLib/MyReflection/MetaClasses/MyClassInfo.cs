@@ -27,6 +27,7 @@ using System.Diagnostics;
 using Imm.ImmDocNetLib.MyReflection.Attributes;
 using Imm.ImmDocNetLib.Documenters;
 using Mono.Cecil.Metadata;
+using Mono.Collections.Generic;
 
 namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 {
@@ -74,7 +75,7 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 
     protected void AddMembers(TypeDefinition typeDefinition)
     {
-      MemberReferenceCollection members = Utils.GetTypeMembers(typeDefinition);
+      var members = Utils.GetTypeMembers(typeDefinition);
 
       foreach (MemberReference memberInfo in members)
       {

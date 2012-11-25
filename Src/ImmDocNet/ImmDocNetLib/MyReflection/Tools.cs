@@ -25,6 +25,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Imm.ImmDocNetLib.MyReflection.MetaClasses;
 using Mono.Cecil;
+using Mono.Collections.Generic;
 
 namespace Imm.ImmDocNetLib.MyReflection
 {
@@ -184,9 +185,9 @@ namespace Imm.ImmDocNetLib.MyReflection
 
           isGenericParameter = tmpType is GenericParameter;
         }
-        else if (type is ReferenceType)
+        else if (type is ByReferenceType)
         {
-          isGenericParameter = ((ReferenceType)type).ElementType is GenericParameter;
+          isGenericParameter = ((ByReferenceType)type).ElementType is GenericParameter;
         }
         else if (type is PointerType)
         {
@@ -611,12 +612,12 @@ namespace Imm.ImmDocNetLib.MyReflection
 
     #region Generics helpers
 
-    public static List<string> ExamineGenericParameters(GenericParameterCollection genericParameters, TypeReference declaringType, out List<MyGenericParameterInfo> myGenericParameters)
+    public static List<string> ExamineGenericParameters(Collection<GenericParameter> genericParameters, TypeReference declaringType, out List<MyGenericParameterInfo> myGenericParameters)
     {
       return ExamineGenericParameters(genericParameters, declaringType, out myGenericParameters, false);
     }
 
-    public static List<string> ExamineGenericParameters(GenericParameterCollection genericParameters, TypeReference declaringType, out List<MyGenericParameterInfo> myGenericParameters, bool returnAllGenericParametersNames)
+    public static List<string> ExamineGenericParameters(Collection<GenericParameter> genericParameters, TypeReference declaringType, out List<MyGenericParameterInfo> myGenericParameters, bool returnAllGenericParametersNames)
     {
       Debug.Assert(genericParameters != null && genericParameters.Count > 0, "Impossible!");
 

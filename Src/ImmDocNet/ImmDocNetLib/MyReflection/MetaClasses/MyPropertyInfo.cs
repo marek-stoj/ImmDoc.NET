@@ -22,11 +22,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using Mono.Cecil;
 using System.Diagnostics;
-
 using Imm.ImmDocNetLib.MyReflection.Attributes;
 using Imm.ImmDocNetLib.Documenters;
+using Mono.Cecil;
+using Mono.Collections.Generic;
 
 namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 {
@@ -131,7 +131,7 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 
         private void AddParameters(MethodDefinition getterInfo, MethodDefinition setterInfo)
         {
-            ParameterDefinitionCollection propParameters = null;
+            Collection<ParameterDefinition> propParameters = null;
 
             if (getterInfo != null)
             {
@@ -139,11 +139,11 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
             }
             else if (setterInfo != null)
             {
-                ParameterDefinitionCollection tmpParameters = setterInfo.Parameters;
+                var tmpParameters = setterInfo.Parameters;
 
                 Debug.Assert(tmpParameters != null && tmpParameters.Count >= 1, "Impossible! Property setter must have at least one parameter.");
 
-                propParameters = new ParameterDefinitionCollection(setterInfo);
+                propParameters = new Collection<ParameterDefinition>();
 
                 for (int i = 0; i < tmpParameters.Count - 1; i++)
                 {

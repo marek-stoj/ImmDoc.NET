@@ -52,7 +52,7 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 
     public void ReadAssembly(string assemblyAbsolutePath)
     {
-      AssemblyDefinition assembly = AssemblyFactory.GetAssembly(assemblyAbsolutePath);
+      AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(assemblyAbsolutePath);
       string assemblyName = assembly.Name.Name;
 
       if (assemblyName != name)

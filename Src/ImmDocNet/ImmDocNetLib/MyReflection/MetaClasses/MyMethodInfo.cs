@@ -68,7 +68,7 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
         this.name += Tools.CreateFormalGenericParametersString(genericParameters);
       }
 
-      string[] readableForms = Tools.GetHumanReadableForms(methodDefinition.ReturnType.ReturnType);
+      string[] readableForms = Tools.GetHumanReadableForms(methodDefinition.ReturnType);
       this.returnTypeFullName = readableForms[0];
       this.returnTypeFullNameWithoutRevArrayStrings = readableForms[1];
 

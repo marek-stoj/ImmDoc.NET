@@ -12,7 +12,7 @@ namespace ImmDocNetLib.Tests
     [SetUp]
     public virtual void SetUp()
     {
-      sampleAssembly = AssemblyFactory.GetAssembly("SampleLibrary.dll");
+      sampleAssembly = AssemblyDefinition.ReadAssembly("SampleLibrary.dll");
     }
 
     [TearDown]

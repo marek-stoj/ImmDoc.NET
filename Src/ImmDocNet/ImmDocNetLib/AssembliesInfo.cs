@@ -64,7 +64,7 @@ namespace Imm.ImmDocNetLib
             try
             {
                 string assemblyAbsolutePath = Path.GetFullPath(assemblyPath);
-                string assemblyName = AssemblyFactory.GetAssembly(assemblyAbsolutePath).Name.Name;
+                string assemblyName = AssemblyDefinition.ReadAssembly(assemblyAbsolutePath).Name.Name;
 
                 MyAssemblyInfo myAssemblyInfo;
 
