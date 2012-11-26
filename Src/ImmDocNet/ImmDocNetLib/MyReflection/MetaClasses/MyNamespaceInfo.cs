@@ -51,52 +51,7 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 
     public void AddType(TypeDefinition typeDefinition)
     {
-      if (typeDefinition.IsClass && !Utils.IsDelegate(typeDefinition))
-      {
-        MyClassInfo myClassInfo = new MyClassInfo(typeDefinition, assemblyName);
-        Dictionary<string, MetaClass> membersGroup;
-        NamespaceMembersGroups namespaceMembersGroupType;
-
-        if (myClassInfo.IsPublic)
-        {
-          namespaceMembersGroupType = NamespaceMembersGroups.PublicClasses;
-        }
-        else if (myClassInfo.IsProtectedInternal)
-        {
-          namespaceMembersGroupType = NamespaceMembersGroups.ProtectedInternalClasses;
-        }
-        else if (myClassInfo.IsProtected)
-        {
-          namespaceMembersGroupType = NamespaceMembersGroups.ProtectedClasses;
-        }
-        else if (myClassInfo.IsInternal)
-        {
-          namespaceMembersGroupType = NamespaceMembersGroups.InternalClasses;
-        }
-        else if (myClassInfo.IsPrivate)
-        {
-          namespaceMembersGroupType = NamespaceMembersGroups.PrivateClasses;
-        }
-        else
-        {
-          Debug.Assert(false, "Impossible! Visibility of a type is not supported.");
-          return;
-        }
-
-        membersGroup = GetMembersGroup(namespaceMembersGroupType);
-
-        if (!membersGroup.ContainsKey(myClassInfo.Name))
-        {
-          membersGroup.Add(myClassInfo.Name, myClassInfo);
-
-          AddGenericNameMappingIfNeeded(myClassInfo, namespaceMembersGroupType);
-        }
-        else
-        {
-          Logger.Warning("Class named '{0}' has already been added to namespace {1}.", myClassInfo.Name, name);
-        }
-      }
-      else if (typeDefinition.IsValueType && !typeDefinition.IsEnum)
+      if (typeDefinition.IsValueType && !typeDefinition.IsEnum)
       {
         MyStructureInfo myStructureInfo = new MyStructureInfo(typeDefinition, assemblyName);
         Dictionary<string, MetaClass> membersGroup;
@@ -229,6 +184,51 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
         else
         {
           Logger.Warning("Enumeration named '{0}' has already been added to namespace {1}.", myEnumerationInfo.Name, name);
+        }
+      }
+      else if (typeDefinition.IsClass && !Utils.IsDelegate(typeDefinition))
+      {
+        MyClassInfo myClassInfo = new MyClassInfo(typeDefinition, assemblyName);
+        Dictionary<string, MetaClass> membersGroup;
+        NamespaceMembersGroups namespaceMembersGroupType;
+
+        if (myClassInfo.IsPublic)
+        {
+          namespaceMembersGroupType = NamespaceMembersGroups.PublicClasses;
+        }
+        else if (myClassInfo.IsProtectedInternal)
+        {
+          namespaceMembersGroupType = NamespaceMembersGroups.ProtectedInternalClasses;
+        }
+        else if (myClassInfo.IsProtected)
+        {
+          namespaceMembersGroupType = NamespaceMembersGroups.ProtectedClasses;
+        }
+        else if (myClassInfo.IsInternal)
+        {
+          namespaceMembersGroupType = NamespaceMembersGroups.InternalClasses;
+        }
+        else if (myClassInfo.IsPrivate)
+        {
+          namespaceMembersGroupType = NamespaceMembersGroups.PrivateClasses;
+        }
+        else
+        {
+          Debug.Assert(false, "Impossible! Visibility of a type is not supported.");
+          return;
+        }
+
+        membersGroup = GetMembersGroup(namespaceMembersGroupType);
+
+        if (!membersGroup.ContainsKey(myClassInfo.Name))
+        {
+          membersGroup.Add(myClassInfo.Name, myClassInfo);
+
+          AddGenericNameMappingIfNeeded(myClassInfo, namespaceMembersGroupType);
+        }
+        else
+        {
+          Logger.Warning("Class named '{0}' has already been added to namespace {1}.", myClassInfo.Name, name);
         }
       }
       else if (Utils.IsDelegate(typeDefinition))

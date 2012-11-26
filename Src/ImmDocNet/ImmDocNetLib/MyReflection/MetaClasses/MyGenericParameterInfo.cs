@@ -63,7 +63,7 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
         result.Add(new BuiltInGenericConstraint(BuiltInGenericConstraintsTypes.Struct));
       }
 
-      ConstraintCollection baseOrInterfaceConstraints = genericParameter.Constraints;
+      var baseOrInterfaceConstraints = genericParameter.Constraints;
 
       if (baseOrInterfaceConstraints != null)
       {
