@@ -44,6 +44,7 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
     private static string dirIndexStr;
 
     private static readonly string IMM_DOC_NET_PROJECT_HOMEPAGE = "http://immdocnet.codeplex.com/";
+    private static readonly string MSDN_LIBRARY_URL_FORMAT = "http://msdn.microsoft.com/library/{0}.aspx";
 
     private const int IO_BUFFER_SIZE = 1024;
 
@@ -116,7 +117,7 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
     private static readonly Regex codePattern = new Regex("<code>(?<Contents>(.|\r|\n)*?)</code>",
                                                           RegexOptions.Multiline | RegexOptions.Compiled);
 
-    private static readonly Regex seePattern = new Regex("(<see cref=\"(?<XmlMemberId>.*?)\">(?<Contents>.*?)</see>)|(<see cref=\"(?<XmlMemberId>.*?)\"[ ]?/>)",
+    private static readonly Regex seePattern = new Regex("(<see cref=\"(?<XmlMemberId>.*?)\"[ ]?/>)|(<see cref=\"(?<XmlMemberId>.*?)\">(?<Contents>.*?)</see>)",
                                                          RegexOptions.Multiline | RegexOptions.Compiled);
 
     private static readonly Regex paramrefPattern = new Regex("<paramref name=\"(?<ParamName>.*?)\" ?/>",
@@ -124,6 +125,8 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
 
     private static readonly Regex typeparamrefPattern = new Regex("<typeparamref name=\"(?<TypeParamName>.*?)\" ?/>",
                                                                   RegexOptions.Multiline | RegexOptions.Compiled);
+
+    private static readonly Regex frameworkTypePattern = new Regex(@"(System|Microsoft)(\.[\w\d]+)+", RegexOptions.Compiled);
 
     private static readonly MatchEvaluator typeRegexEvaluator = new MatchEvaluator(OnProcessTypeMatch);
     private static readonly MatchEvaluator codeRegexEvaluator = new MatchEvaluator(OnCodePatternMatch);
@@ -2831,11 +2834,18 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
       string xmlMemberId = match.Groups["XmlMemberId"].Value;
       string contents = match.Groups["Contents"].Value;
       string link = null;
+      string target = null;
 
       MetaClass metaClass = assembliesInfo.FindMember(xmlMemberId);
 
       if (metaClass == null)
       {
+        link = TryResolveFrameworkClass(xmlMemberId);
+        if (link != null)
+        {
+          target = "_top";
+        }
+
         if (contents == "")
         {
           if (xmlMemberId.Length > 1 && xmlMemberId[1] == ':')
@@ -2887,7 +2897,7 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
       }
       else
       {
-        return "<a href=\"" + link + "\">" + contents + "</a>";
+        return "<a href=\"" + link + "\"" + (target != null ? " target=\"" + target + "\"" : string.Empty) + ">" + contents + "</a>";
       }
     }
 
@@ -3210,6 +3220,21 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
     #endregion
 
     #region Private links helper methods
+
+    private string TryResolveFrameworkClass(string xmlMemberId)
+    {
+      if (xmlMemberId.IndexOf(':') == 1)
+      {
+        xmlMemberId = xmlMemberId.Substring(2);
+      }
+
+      if (frameworkTypePattern.IsMatch(xmlMemberId))
+      {
+        return string.Format(MSDN_LIBRARY_URL_FORMAT, xmlMemberId.ToLowerInvariant());
+      }
+
+      return null;
+    }
 
     private string ResolveLink(MetaClass metaClass)
     {
