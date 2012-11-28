@@ -3246,7 +3246,7 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
                 let parts = line.Split(',')
               select new
               {
-                ClassName = parts.First().ToLowerInvariant(),
+                ClassName = parts.First(),
                 ContentId = parts.Last()
               };
 
