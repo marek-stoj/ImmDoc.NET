@@ -22,6 +22,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
@@ -69,6 +70,8 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
     private static readonly string TYPES_INDEX_FILE_NAME = "!types.html";
     private static readonly string TABLE_OF_CONTENTS_FILE_NAME = "0.html";
     private static readonly string ASSEMBLIES_INDEX_FILE_NAME = "1.html";
+    private static readonly string CLASS_LIBRARY_FILE_NAME = "ClassLibrary.csv.gz";
+    private static readonly string GZIP_FILE_EXTENSION = ".gz";
 
     private static readonly string PROJECT_SUMMARY = "<p>This is the list of all assemblies in your project.</p>";
     private static readonly string NO_SUMMARY = "<p>There is no summary.</p>";
@@ -87,15 +90,15 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
     private static readonly int[] EXCEPTIONS_COLUMNS_WIDTHS = new int[] { 25, 75 };
 
     private static readonly string[] GRAPHICS_FILES_NAMES = new string[] { "BigSquareExpanded.gif",
-                                                                               "BigSquareCollapsed.gif",
-                                                                               "SmallSquareExpanded.gif",
-                                                                               "SmallSquareCollapsed.gif",
-                                                                               "TV_Minus.gif",
-                                                                               "TV_Null.gif",
-                                                                               "TV_Plus.gif",
-                                                                               "TV_VerticalDots.gif",
-                                                                               "LeftArrow.gif",
-                                                                               "RightArrow.gif"};
+                                                                           "BigSquareCollapsed.gif",
+                                                                           "SmallSquareExpanded.gif",
+                                                                           "SmallSquareCollapsed.gif",
+                                                                           "TV_Minus.gif",
+                                                                           "TV_Null.gif",
+                                                                           "TV_Plus.gif",
+                                                                           "TV_VerticalDots.gif",
+                                                                           "LeftArrow.gif",
+                                                                           "RightArrow.gif"};
 
     private static readonly string PARAM_INDENT = "        ";
     private static readonly string GENERIC_CONSTRAINTS_INDENT = PARAM_INDENT.Replace(" ", "&nbsp;");
@@ -126,8 +129,6 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
     private static readonly Regex typeparamrefPattern = new Regex("<typeparamref name=\"(?<TypeParamName>.*?)\" ?/>",
                                                                   RegexOptions.Multiline | RegexOptions.Compiled);
 
-    private static readonly Regex frameworkTypePattern = new Regex(@"(System|Microsoft)(\.[\w\d]+)+", RegexOptions.Compiled);
-
     private static readonly MatchEvaluator typeRegexEvaluator = new MatchEvaluator(OnProcessTypeMatch);
     private static readonly MatchEvaluator codeRegexEvaluator = new MatchEvaluator(OnCodePatternMatch);
     private static readonly MatchEvaluator paramrefRegexEvaluator = new MatchEvaluator(OnParamrefPatternMatch);
@@ -135,6 +136,7 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
     private readonly MatchEvaluator seeRegexEvaluator;
 
     private static Dictionary<string, string> systemTypesConversions;
+    private IDictionary<string, string> frameworkTypes;
 
     private static XslCompiledTransform listsXslt;
     private static XmlReaderSettings listsXmlReaderSettings;
@@ -3176,34 +3178,41 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
       return result;
     }
 
-    private void ExtractBinaryResourceToFile(string resourceName, string fileName)
+    private Stream GetResourceStream(string resourceName)
     {
-      Assembly assembly = Assembly.GetExecutingAssembly();
-      string resourceFullName = GetType().Namespace + "." + "Res." + resourceName;
-      Stream resourceStream = assembly.GetManifestResourceStream(resourceFullName);
-
+      var assembly = Assembly.GetExecutingAssembly();
+      var resourceFullName = GetType().Namespace + "." + "Res." + resourceName;
+      var resourceStream = assembly.GetManifestResourceStream(resourceFullName);
       Debug.Assert(resourceStream != null, String.Format("Impossible! Couldn't find resorce '{0}'", resourceFullName));
 
-      FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-
-      byte[] buffer = new byte[IO_BUFFER_SIZE];
-      int bytesToRead = buffer.Length;
-
-      while (true)
+      if (resourceName.EndsWith(GZIP_FILE_EXTENSION))
       {
-        int bytesRead = resourceStream.Read(buffer, 0, bytesToRead);
-
-        if (bytesRead == 0)
-        {
-          // EOF
-          break;
-        }
-
-        fs.Write(buffer, 0, bytesRead);
+        return new GZipStream(resourceStream, CompressionMode.Decompress, false);
       }
 
-      fs.Close();
-      resourceStream.Close();
+      return resourceStream;
+    }
+
+    private void ExtractBinaryResourceToFile(string resourceName, string fileName)
+    {
+      using (var resourceStream = GetResourceStream(resourceName))
+      using (var fs = File.Create(fileName))
+      {
+        var buffer = new byte[IO_BUFFER_SIZE];
+        int bytesToRead = buffer.Length;
+
+        while (true)
+        {
+          int bytesRead = resourceStream.Read(buffer, 0, bytesToRead);
+          if (bytesRead == 0)
+          {
+            // EOF
+            break;
+          }
+
+          fs.Write(buffer, 0, bytesRead);
+        }
+      }
     }
 
     private void WriteStringToFile(string fileName, string contents)
@@ -3221,6 +3230,34 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
 
     #region Private links helper methods
 
+    private IDictionary<string, string> FrameworkTypes
+    {
+      get
+      {
+        if (frameworkTypes == null)
+        {
+          using (var stream = GetResourceStream(CLASS_LIBRARY_FILE_NAME))
+          using (var sr = new StreamReader(stream))
+          {
+            var typeList =
+              from rawLine in sr.ReadToEnd().Split('\n')
+                let line = rawLine.Trim()
+              where !string.IsNullOrEmpty(line) && !line.StartsWith("//")
+                let parts = line.Split(',')
+              select new
+              {
+                ClassName = parts.First(),
+                ContentId = parts.Last()
+              };
+
+            frameworkTypes = typeList.ToDictionary(c => c.ClassName, c => c.ContentId);
+          }
+        }
+
+        return frameworkTypes;
+      }
+    }
+
     private string TryResolveFrameworkClass(string xmlMemberId)
     {
       if (xmlMemberId.IndexOf(':') == 1)
@@ -3228,9 +3265,10 @@ namespace Imm.ImmDocNetLib.Documenters.HTMLDocumenter
         xmlMemberId = xmlMemberId.Substring(2);
       }
 
-      if (frameworkTypePattern.IsMatch(xmlMemberId))
+      string contentId; 
+      if (FrameworkTypes.TryGetValue(xmlMemberId.ToLowerInvariant(), out contentId))
       {
-        return string.Format(MSDN_LIBRARY_URL_FORMAT, xmlMemberId.ToLowerInvariant());
+        return string.Format(MSDN_LIBRARY_URL_FORMAT, contentId);
       }
 
       return null;
