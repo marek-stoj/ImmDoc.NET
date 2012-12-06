@@ -11,7 +11,10 @@ developed in C#.
 
   * Simple
   * Light-weight
-  * Supports .NET Framework 2.0
+  * Blazingly fast
+      * 10-20 times faster than VsDocMan
+      * 20-25 times faster than Sandcastle
+  * Supports .NET Framework 2.0 and above
   * Can generate HTML and CHM documentation
   * Uses Mono.Cecil
 
