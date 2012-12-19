@@ -59,7 +59,7 @@ namespace Imm.ImmDocNetLib
 
         #region Populating documentation with assemblies
 
-        public void ReadMyAssemblyInfoFromAssembly(string assemblyPath, List<string> excludedNamespaces)
+        public void ReadMyAssemblyInfoFromAssembly(string assemblyPath, IEnumerable<string> excludedNamespaces)
         {
             try
             {

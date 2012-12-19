@@ -52,7 +52,7 @@ namespace Imm.ImmDocNet
     private static string outputDirectory = "doc";
     private static AssembliesInfo assembliesInfo;
     private static Dictionary<string, bool> excludedFilesNames;
-    private static List<string> excludedNamespaces;
+    private static HashSet<string> excludedNamespaces;
     private static DocumentationGenerationOptions docGenOptions = DocumentationGenerationOptions.None;
 
     private static readonly string ASSEMBLY_CODE_BASE;
@@ -64,7 +64,7 @@ namespace Imm.ImmDocNet
       ASSEMBLY_CODE_BASE = Assembly.GetExecutingAssembly().GetName().CodeBase;
 
       excludedFilesNames = new Dictionary<string, bool>();
-      excludedNamespaces = new List<string>();
+      excludedNamespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     }
 
     #endregion
@@ -316,7 +316,7 @@ namespace Imm.ImmDocNet
 
           excludedFilesNames[opArg.ToLower()] = true;
         }
-        else if (opName == "exnamespace" || opName == "exn")
+        else if (opName == "excludenamespace" || opName == "exn")
         {
           if (opArg == null) { PrintUsageAndExit(); }
 
@@ -359,7 +359,7 @@ namespace Imm.ImmDocNet
       }
     }
 
-    private static void ProcessFilesNames(List<string> filesNames, List<string> excludedNamespaces)
+    private static void ProcessFilesNames(List<string> filesNames, IEnumerable<string> excludedNamespaces)
     {
       assembliesInfo = new AssembliesInfo(projectName == null ? "Documentation Project" : projectName);
 
@@ -474,7 +474,7 @@ namespace Imm.ImmDocNet
       Console.WriteLine("  -pn,  -ProjectName:STRING      sets STRING as the name of the project");
       Console.WriteLine("  -cn,  -CHMName:STRING          sets STRING as the name of the output CHM file");
       Console.WriteLine("  -ex,  -Exclude:FILE            excludes FILE from processing");
-      Console.WriteLine("  -exn, -ExNamespace:FILE        excludes NAMESPACE from processing");
+      Console.WriteLine("  -exn, -ExcludeNamespace:STRING excludes namespace STRING from processing");
       Console.WriteLine("  -od,  -OutputDirectory:DIR     sets DIR as the output directory");
       Console.WriteLine("  -fd,  -ForceDelete             forces the program to delete output directory");
       Console.WriteLine("  -iim, -IncludeInternalMembers  internal members will be processed");

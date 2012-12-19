@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mono.Cecil;
 using System.IO;
 using System.Diagnostics;
@@ -50,7 +51,7 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
 
     #region Public methods
 
-    public void ReadAssembly(string assemblyAbsolutePath, List<string> excludedNamespaces)
+    public void ReadAssembly(string assemblyAbsolutePath, IEnumerable<string> excludedNamespaces)
     {
       AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(assemblyAbsolutePath);
       string assemblyName = assembly.Name.Name;
@@ -80,7 +81,7 @@ namespace Imm.ImmDocNetLib.MyReflection.MetaClasses
         MyNamespaceInfo namespaceInfo;
         string typeNamespace = Utils.GetTypeNamespace(typeDefinition);
 
-        if (excludedNamespaces.Contains(typeNamespace.ToLower()))
+        if (excludedNamespaces.Contains(typeNamespace))
         {
           continue;
         }
